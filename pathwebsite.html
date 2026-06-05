@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Path</title>
+<meta name="description" content="Path — see your life trajectory. Join the waitlist." />
+<style>
+  :root{
+    --ink:        #1d1d1f;
+    --ink-soft:   #6e6e73;
+    --hair:       #d2d2d7;
+    --field:      #f5f5f7;
+    --bg:         #ffffff;
+    --accent:     #1d1d1f;
+    --faint:      #a1a1a6;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Helvetica", Arial, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  .page{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:clamp(22px,3.4vw,40px);
+  }
+
+  .top{
+    position:absolute;
+    top:clamp(22px,3.4vw,40px);
+    left:0;right:0;
+    display:flex;justify-content:center;
+  }
+  .mark{
+    width:28px;height:28px;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #6f6f76 0%, #2a2a2e 46%, #1d1d1f 100%);
+    box-shadow:inset 0 1px 1px rgba(255,255,255,.28), 0 1px 3px rgba(0,0,0,.18);
+    cursor:pointer;
+    transition:all .3s ease;
+  }
+  @keyframes orbPulse{
+    0%{transform:scale(1)}
+    35%{transform:scale(.88)}
+    70%{transform:scale(1.08)}
+    100%{transform:scale(1)}
+  }
+  .mark.pulsing{animation:orbPulse .5s cubic-bezier(.2,.7,.2,1);}
+
+  .hero{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:clamp(28px,4vw,46px);
+  }
+  .headline-group{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:clamp(14px,1.8vw,22px);
+    animation:rise .9s cubic-bezier(.2,.7,.2,1) .1s both;
+  }
+  h1{
+    font-size:clamp(64px,13vw,168px);
+    font-weight:600;
+    letter-spacing:-.045em;
+    line-height:.92;
+  }
+  .sub{
+    font-size:clamp(20px,2.7vw,30px);
+    font-weight:400;
+    letter-spacing:-.012em;
+    color:var(--ink-soft);
+    max-width:18ch;
+    text-wrap:balance;
+  }
+
+  form{
+    display:flex;
+    gap:10px;
+    width:min(440px,90vw);
+    animation:rise .9s cubic-bezier(.2,.7,.2,1) .32s both;
+  }
+  .field{
+    flex:1;
+    height:54px;
+    padding:0 20px;
+    font-family:var(--sans);
+    font-size:17px;
+    color:var(--ink);
+    background:var(--field);
+    border:1px solid transparent;
+    border-radius:980px;
+    outline:none;
+    transition:border-color .25s ease, background .25s ease;
+    min-width:0;
+  }
+  .field::placeholder{color:#a1a1a6}
+  .field:focus{ background:#fff; border-color:var(--ink); }
+  .go{
+    height:54px;
+    padding:0 26px;
+    font-family:var(--sans);
+    font-size:17px;
+    font-weight:500;
+    letter-spacing:-.01em;
+    color:#fff;
+    background:var(--accent);
+    border:0;
+    border-radius:980px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .go:hover{opacity:.85}
+  .go:active{transform:scale(.97)}
+  .go:disabled{opacity:.5;cursor:default}
+
+  .done-msg{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:min(440px,90vw);
+    justify-content:center;
+    font-size:19px;
+    letter-spacing:-.012em;
+    color:var(--ink);
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .5s ease,transform .5s ease;
+  }
+  .done-msg.show{opacity:1;transform:none}
+  .check{
+    width:26px;height:26px;border-radius:50%;
+    background:var(--ink);color:#fff;
+    display:grid;place-items:center;
+    font-size:14px;flex:none;
+  }
+  .err{
+    font-size:14px;
+    color:#c0392b;
+    margin-top:14px;
+    min-height:18px;
+    letter-spacing:-.005em;
+    opacity:0;
+    transition:opacity .25s ease;
+  }
+  .err.show{opacity:1}
+  .hidden{display:none}
+
+  .foot{
+    position:absolute;
+    bottom:clamp(22px,3.4vw,40px);
+    left:0;right:0;
+    display:flex;justify-content:center;
+    font-size:13px;
+    letter-spacing:-.005em;
+    color:var(--faint);
+  }
+
+  @keyframes rise{from{transform:translateY(14px)}to{transform:none}}
+
+  @media (max-width:520px){
+    form{flex-direction:column}
+    .go{width:100%}
+  }
+</style>
+</head>
+<body>
+  <div class="page" id="page">
+    <header class="top">
+      <div class="mark" id="mark" role="img" aria-label="Path"></div>
+    </header>
+
+    <main class="hero">
+      <div class="headline-group">
+        <h1>Path</h1>
+        <p class="sub">See your life trajectory.</p>
+      </div>
+
+      <form id="signup" novalidate>
+        <input class="field" type="email" placeholder="Email" aria-label="Email address" autocomplete="email" required />
+        <button class="go" type="submit">Join the waitlist</button>
+      </form>
+
+      <div class="done-msg hidden" id="done">
+        <span class="check">✓</span>
+        <span>You're on the list. We'll be in touch.</span>
+      </div>
+
+      <p class="err" id="err"></p>
+    </main>
+
+    <footer class="foot">
+      <span>Launching 2026</span>
+    </footer>
+  </div>
+
+  <!-- Supabase client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ========================================================
+    //  PASTE YOUR TWO SUPABASE VALUES HERE
+    //  Find them in Supabase → Project Settings → API
+    // ========================================================
+    const SUPABASE_URL = "https://pbutjjudrrbodcynucbs.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBidXRqanVkcnJib2RjeW51Y2JzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyNTQwOTEsImV4cCI6MjA3NTgzMDA5MX0.7F1EsQMk9GVeOzUJTiifFNjoMSHZ8ZGJcOqvyBNkOTs";
+    // ========================================================
+
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('signup');
+    const done = document.getElementById('done');
+    const err  = document.getElementById('err');
+    const btn  = form.querySelector('.go');
+
+    function shake(el){
+      el.animate(
+        [{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],
+        {duration:300}
+      );
+    }
+    function showError(msg){
+      err.textContent = msg;
+      err.classList.add('show');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.classList.remove('show');
+      const input = form.querySelector('input');
+      const email = input.value.trim();
+
+      if(!email || !email.includes('@') || !email.includes('.')){
+        input.focus();
+        shake(input);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Joining…';
+
+      const { error } = await db.from('waitlist').insert({ email });
+
+      if(error){
+        btn.disabled = false;
+        btn.textContent = 'Join the waitlist';
+        // 23505 = unique violation (already signed up) — treat as success
+        if(error.code === '23505'){
+          showSuccess();
+        } else {
+          showError('Something went wrong. Please try again.');
+          shake(input);
+        }
+        return;
+      }
+      showSuccess();
+    });
+
+    function showSuccess(){
+      form.classList.add('hidden');
+      err.classList.remove('show');
+      done.classList.remove('hidden');
+      requestAnimationFrame(()=> done.classList.add('show'));
+    }
+
+    const mark = document.getElementById('mark');
+    mark.addEventListener('click', () => {
+      mark.classList.remove('pulsing');
+      void mark.offsetWidth;
+      mark.classList.add('pulsing');
+    });
+  </script>
+</body>
+</html>
