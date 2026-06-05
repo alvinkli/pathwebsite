@@ -199,7 +199,7 @@
 
       <div class="done-msg hidden" id="done">
         <span class="check">✓</span>
-        <span>You're on the list. We'll be in touch.</span>
+        <span id="doneText">You're on the list. We'll be in touch.</span>
       </div>
 
       <p class="err" id="err"></p>
@@ -261,17 +261,20 @@
         btn.textContent = 'Join the waitlist';
         // 23505 = unique violation (already signed up) — treat as success
         if(error.code === '23505'){
-          showSuccess();
+          showSuccess(true);
         } else {
           showError('Something went wrong. Please try again.');
           shake(input);
         }
         return;
       }
-      showSuccess();
+      showSuccess(false);
     });
 
-    function showSuccess(){
+    function showSuccess(alreadyExists){
+      document.getElementById('doneText').textContent = alreadyExists
+        ? "You're already on the list! We'll be in touch."
+        : "You're on the list. We'll be in touch.";
       form.classList.add('hidden');
       err.classList.remove('show');
       done.classList.remove('hidden');
